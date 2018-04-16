@@ -1,5 +1,6 @@
 package sample;
 
+import bm.gameUtil.Country;
 import bm.hexagonUtil.HexagonMap;
 import bm.hexagonUtil.HexagonUtils;
 import bm.generatorUtil.NoiseGenerator;
@@ -146,8 +147,18 @@ public class Controller {
                 console.appendText("[GEN] Generation finished in " + (stopTime - startTime) + "ms\n");
             }
 
-            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), true, 0, 50, 20, 20);
-            map.initialize();
+            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), 1, false, 0, 50, 4, 4);
+
+            Country[][] banane = {{new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a")},
+                {new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")},
+                {new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")},
+                {new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")}};
+
+            map.initializeLandmass(img);
+
+            map.initializeCountries(banane);
+
+            map.drawFill();
             map.drawGrid();
 
             /*

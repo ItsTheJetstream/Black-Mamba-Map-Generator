@@ -1,11 +1,15 @@
 package bm.hexagonUtil;
 
+import bm.gameUtil.Country;
+
 import java.awt.*;
 import java.util.HashMap;
 
 public class Hexagon {
     private Color c; // the color of the body of this hexagon
     private HashMap<Integer, Color> sides; // a HashMap representing the colors of this hexagon
+
+    private Country country; // the country this Hexagon belongs to
 
     /**
      * Initializes a Hexagon with body-color and one side-color for all sides
@@ -63,6 +67,14 @@ public class Hexagon {
             sides.put(sideID, newColor);
             return true;
         }
+    }
+
+    public Country getCountry() {
+        return this.country;
+    }
+
+    public void setCountry(Country c) {
+        this.country = c;
     }
 
     public Color getBodyColor() {
