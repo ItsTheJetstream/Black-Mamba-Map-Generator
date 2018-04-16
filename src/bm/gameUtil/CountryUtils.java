@@ -10,7 +10,11 @@ public class CountryUtils {
 
     private String[] countryNames = {"Germany", "France", "England", "America", "Finland", "Sweden", "BananaLand",
                                     "Ukraine", "Netherlands", "Denmark", "Norway", "Australia", "New Zealand", "Italy",
-                                    ""};
+                                    "Russia", "Ireland", "Brazil", "Spain", "Austria", "Chile", "China", "Japan",
+                                    "Cambodia", "Congo", "Madagaskar", "Poland", "Czech Republic", "Singapore",
+                                    "Indonesia", "Taiwan", "Nepal", "Mongolia", "India", "Uruquay", "Korea", "Estonia",
+                                    "Liechtenstein", "Skyrim", "Kanto", "Argentina", "Peru", "Equador", "Panama",
+                                    "Egypt", "Bolivia"};
 
     private Random rnd;
 
