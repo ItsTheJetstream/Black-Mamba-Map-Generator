@@ -1,4 +1,6 @@
-package bm.util;
+package bm.hexagonUtil;
+
+import bm.gameUtil.BiomeInfo;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -50,9 +52,9 @@ public class HexagonUtils {
         int y = y0 + b;
 
         int[] cx = new int[] {x+t,x+s+t,x+s+t+t,x+s+t,x+t,x};
-        int[]cy = new int[] {y,y,y+r,y+r+r,y+r+r,y+r};
+        int[] cy = new int[] {y,y,y+r,y+r+r,y+r+r,y+r};
 
-        return new Polygon(cx,cy,6);
+        return new Polygon(cx, cy,6);
     }
 
     public void fillHex(int x0, int y0, Color c, Graphics2D g2) {
@@ -104,6 +106,7 @@ public class HexagonUtils {
 
         Polygon poly = hexagon(x, y);
 
+        /*
         if (countGreen > countBlue) {
             g2.setColor(Color.GREEN);
             try {
@@ -121,6 +124,7 @@ public class HexagonUtils {
         }
 
         g2.fillPolygon(poly);
+        */
     }
 
     public void fillBiomes(int biomeCount, int seed) {
@@ -165,10 +169,12 @@ public class HexagonUtils {
                     }
                 }
 
+                /*
                 if (field[i+1][j+1].getColor() == Color.GREEN) {
                     field[i+1][j+1].setColor(nearest);
                     fillHex(i, j, nearest, g2);
                 }
+                */
             }
         }
     }

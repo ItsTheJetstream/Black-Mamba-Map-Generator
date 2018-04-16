@@ -1,4 +1,4 @@
-package bm.util;
+package bm.generatorUtil;
 
 public class NoiseGenerator {
     public static double[][] generateNoiseMap(int mapWidth, int mapHeight, double scale, int octaves, double persistance, double lacunarity, long seed) {

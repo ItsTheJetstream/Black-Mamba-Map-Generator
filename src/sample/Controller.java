@@ -1,7 +1,8 @@
 package sample;
 
-import bm.util.HexagonUtils;
-import bm.util.NoiseGenerator;
+import bm.hexagonUtil.HexagonMap;
+import bm.hexagonUtil.HexagonUtils;
+import bm.generatorUtil.NoiseGenerator;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
@@ -11,11 +12,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -147,6 +146,11 @@ public class Controller {
                 console.appendText("[GEN] Generation finished in " + (stopTime - startTime) + "ms\n");
             }
 
+            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), true, 0, 50, 20, 20);
+            map.initialize();
+            map.drawGrid();
+
+            /*
             HexagonUtils hexu = new HexagonUtils(hexS, b, hexAx, hexAy, xOffSet, yOffSet, img); // initializes the HexagonUtils for this picture
 
             // draws the map as hexagons if so wished
@@ -183,11 +187,14 @@ public class Controller {
                 if (useConsole) console.appendText("[GEN] Finished! \n");
             }
 
+            */
+
             // draws the image to the pane
             WritableImage image = SwingFXUtils.toFXImage(img, null);
             imagePane.setImage(image);
 
             current = img; //sets the "current" (last generated image) to the newly generated one
+
         } else {
             console.appendText("[ERROR] Generation not succesful!");
         }

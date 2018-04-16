@@ -1,4 +1,4 @@
-package bm.util;/*
+package bm.generatorUtil;/*
  * OpenSimplex Noise in Java.
  * by Kurt Spencer
  * 
