@@ -147,7 +147,7 @@ public class Controller {
                 console.appendText("[GEN] Generation finished in " + (stopTime - startTime) + "ms\n");
             }
 
-            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), 1, false, 0, 50, 4, 4);
+            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), 1, false, 0, 50, 10, 10);
 
             Country[][] banane = {{new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a")},
                 {new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")},
@@ -156,7 +156,9 @@ public class Controller {
 
             map.initializeLandmass(img);
 
-            map.initializeCountries(banane);
+            //map.initializeCountries(banane);
+
+            map.colorHex(1,2,Color.RED);
 
             map.drawFill();
             map.drawGrid();
