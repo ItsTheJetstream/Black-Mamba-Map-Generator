@@ -279,7 +279,7 @@ public class HexagonMap {
 
     public boolean colorHex(int x, int y, Color c) {
         try {
-            Hexagon workHex = map[x][y];
+            Hexagon workHex = map[y][x];
             workHex.setBodyColor(c);
             return true;
         } catch (Exception e) {

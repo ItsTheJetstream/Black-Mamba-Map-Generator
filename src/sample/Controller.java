@@ -147,7 +147,7 @@ public class Controller {
                 console.appendText("[GEN] Generation finished in " + (stopTime - startTime) + "ms\n");
             }
 
-            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), 1, false, 0, 50, 10, 10);
+            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), 1, false, 0, 50, 12, 10);
 
             Country[][] banane = {{new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a")},
                 {new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")},
