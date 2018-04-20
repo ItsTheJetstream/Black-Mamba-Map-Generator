@@ -75,31 +75,35 @@ public class HexagonMap {
         if (offSet) map = new Hexagon[sizeX + 1][sizeY + 1]; // making the map larger if there is anOffSet
         else map = new Hexagon[sizeX][sizeY];
 
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
+        int maxX = offSet ? sizeX + 1 : sizeX;
+        int maxY = offSet ? sizeY + 1 : sizeY;
+
+        for (int i = 0; i < maxX; i++) {
+            for (int j = 0; j < maxY; j++) {
                 map[i][j] = new Hexagon(defaultBodyColor, defaultOutlineColor);
             }
         }
     }
 
     public void initializeLandmass(BufferedImage image) {
-        if (map == null) initialize();
+        if (map == null) initialize(); // initilaizes the map first if it has not been done yet
 
-        int start = offSet ? -1 : 0;
+        int start = offSet ? -1 : 0; // start value depending on if the hexmap is offset or not
 
         for (int i = start; i < sizeX; i++) {
             for (int j = start; j < sizeY; j++) {
-                int x = i * (side + tSide);
-                int y = j * height + (i % 2) * height / 2;
+                int x = i * (side + tSide); // x-position on the canvas
+                int y = j * height + (i % 2) * height / 2; // y-position on the canvas
 
-                int countBlue = 0;
-                int countGreen = 0;
+                int countBlue = 0; // amount of pixels with blue color
+                int countGreen = 0; // amount of pixels with green color
 
                 int ra = radius; // radius of the circle
                 int mx = x + tSide + side / 2; // x-coordinate of the middle of the circle
                 int my = y + radius; // y-coordinate of the middle of the circle
 
                 // loops through every pixel of the circle
+                // searches for green and blue, increments the according values
                 for (int k = my-ra; k < my+ra; k++) {
                     for (int l = mx; (l-mx)*(l-mx) + (k-my)*(k-my) <= ra*ra; l--) {
                         try {
@@ -126,9 +130,11 @@ public class HexagonMap {
                     }
                 }
 
+                // new values for x and y to work on the array
                 int xS = offSet ? i + 1 : i;
                 int yS = offSet ? j + 1 : j;
 
+                // colors the according hexagon either blue or green, whatever has been found the most
                 if (countGreen > countBlue) {
                     Hexagon change = map[xS][yS];
                     change.setBodyColor(Color.GREEN);
@@ -140,6 +146,10 @@ public class HexagonMap {
         }
     }
 
+    /**
+     * Loops through every Hexagon in the array and draws its body color onto the Graphics Object
+     * @return true if everything worked, false if an error occured (map not intitialized)
+     */
     public boolean drawFill() {
         if (map == null) return false;
 
@@ -154,6 +164,8 @@ public class HexagonMap {
 
                 int xS = offSet ? i + 1 : i;
                 int yS = offSet ? j + 1 : j;
+
+                colorHex(x, y, map[xS][yS].getBodyColor());
 
                 g2.setColor(map[xS][yS].getBodyColor());
                 g2.fillPolygon(poly);
@@ -279,7 +291,7 @@ public class HexagonMap {
 
     public boolean colorHex(int x, int y, Color c) {
         try {
-            Hexagon workHex = map[y][x];
+            Hexagon workHex = map[x][y];
             workHex.setBodyColor(c);
             return true;
         } catch (Exception e) {
