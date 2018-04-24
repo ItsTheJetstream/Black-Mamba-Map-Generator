@@ -1,13 +1,13 @@
 package bm.hexagonUtil;
 
-import bm.gameUtil.BiomeInfo;
+import bm.gameUtil.Biome;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class HexagonUtils {
+public class HexagonUtil {
 
     private int h = 0;
     private int r = 0;
@@ -27,7 +27,12 @@ public class HexagonUtils {
 
     Graphics2D g2;
 
-    public HexagonUtils(int height, int border, int sizeX, int sizeY, int xOffSet, int yOffSet, BufferedImage img) {
+    public static double hex_distance(int x1, int y1, int x2, int y2) {
+        return (Math.abs(x1 - x2) + Math.abs(x1 + y1 - x2 -y2) + Math.abs(y1 - y2)) / 2;
+    }
+
+    /*
+    public HexagonUtil(int height, int border, int sizeX, int sizeY, int xOffSet, int yOffSet, BufferedImage img) {
         h = height;			// h = basic dimension: height (distance between two adj centresr aka size)
         r = h/2;			// r = radius of inscribed circle
         s = (int) (h / 1.73205);	// s = (h/2)/cos(30)= (h/2) / (sqrt(3)/2) = h / sqrt(3)
@@ -46,6 +51,7 @@ public class HexagonUtils {
 
         g2 = (Graphics2D) img.getGraphics(); // initializes the graphics for the image
     }
+    */
 
     public Polygon hexagon(int x0, int y0) {
         int x = x0 + b;
@@ -131,7 +137,7 @@ public class HexagonUtils {
         Color[] usable = {new Color(255, 204, 102), new Color(0, 204, 102),
                 new Color(153, 102, 51), new Color(51, 102, 0)};
 
-        ArrayList<BiomeInfo> biomes = new ArrayList<BiomeInfo>();
+        ArrayList<Biome> biomes = new ArrayList<Biome>();
 
         Random rnd = new Random(Integer.toUnsignedLong(seed));
         Random bR = new Random(Integer.toUnsignedLong(seed + rnd.nextInt(10)));
@@ -147,7 +153,7 @@ public class HexagonUtils {
             }
 
             if (!already) {
-                biomes.add(new BiomeInfo(usable[bR.nextInt(4)], nx, ny));
+                biomes.add(new Biome(usable[bR.nextInt(4)], nx, ny));
                 c += 1;
             }
         }

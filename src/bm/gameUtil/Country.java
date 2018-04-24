@@ -8,6 +8,16 @@ public class Country {
 
     private Color outlineColor;
 
+    private int posX;
+    private int posY;
+
+    public Country(Color cColor, String name, int posX, int posY) {
+        this.name = name;
+        this.outlineColor = cColor;
+        this.posX = posX;
+        this.posY = posY;
+    }
+
     public Country(Color cColor, String name) {
         this.name = name;
         this.outlineColor = cColor;
@@ -23,5 +33,13 @@ public class Country {
 
     public String getName() {
         return name;
+    }
+
+    public int getX() {
+        return this.posX;
+    }
+
+    public int getY() {
+        return this.posY;
     }
 }

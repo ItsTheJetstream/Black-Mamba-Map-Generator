@@ -1,10 +1,13 @@
 package bm.hexagonUtil;
 
-import bm.gameUtil.BiomeInfo;
+import bm.gameUtil.Biome;
 import bm.gameUtil.Country;
+import bm.gameUtil.CountryUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class HexagonMap {
 
@@ -36,6 +39,7 @@ public class HexagonMap {
                             // of the image (to leave less bugs)
 
     private Hexagon[][] map; // the actual Map of Hexagons
+    private boolean[][] landmass; // the landmass represented as "true" in this array
 
     private Graphics2D g2; // the graphics object to work on, usually of a BufferedImage
 
@@ -43,6 +47,8 @@ public class HexagonMap {
     private Color defaultOutlineColor = Color.BLACK; // the default outline Color for the Hexagons
 
     private Color borderColor = Color.BLACK; // the color of the country borders, set to black for default
+
+    private Random rnd;
 
     /**
      *
@@ -69,18 +75,21 @@ public class HexagonMap {
         this.seed = seed;
 
         this.offSet = offSet;
+
+        this.rnd = new Random(Integer.toUnsignedLong(seed));
     }
 
     public void initialize() {
-        if (offSet) map = new Hexagon[sizeX + 1][sizeY + 1]; // making the map larger if there is anOffSet
-        else map = new Hexagon[sizeX][sizeY];
-
         int maxX = offSet ? sizeX + 1 : sizeX;
         int maxY = offSet ? sizeY + 1 : sizeY;
+
+        map = new Hexagon[maxX][maxY];
+        landmass = new boolean[maxX][maxY];
 
         for (int i = 0; i < maxX; i++) {
             for (int j = 0; j < maxY; j++) {
                 map[i][j] = new Hexagon(defaultBodyColor, defaultOutlineColor);
+                landmass[i][j] = true;
             }
         }
     }
@@ -138,9 +147,11 @@ public class HexagonMap {
                 if (countGreen > countBlue) {
                     Hexagon change = map[xS][yS];
                     change.setBodyColor(Color.GREEN);
+                    landmass[xS][yS] = true;
                 } else {
                     Hexagon change = map[xS][yS];
                     change.setBodyColor(Color.BLUE);
+                    landmass[xS][yS] = false;
                 }
             }
         }
@@ -197,8 +208,9 @@ public class HexagonMap {
         return true;
     }
 
-    public boolean initializeCountries(Country[][] countries) {
-        if (map == null || countries.length < map.length || countries[0].length < map[0].length) return false;
+    public boolean initializeCountries(int count) {
+        CountryUtil cU = new CountryUtil(rnd);
+        Country[][] countries = cU.initCountries(count, sizeX, sizeY, landmass, null);
 
         int newSizeX = offSet ? sizeX + 1 : sizeX;
         int newSizeY = offSet ? sizeY + 1 : sizeY;
@@ -214,11 +226,12 @@ public class HexagonMap {
             }
         }
 
-        int[] xChangerOdd = {-1, 0, 1, 1, 1, 0};
-        int[] yChangerOdd = {0, 1, 1, 0, -1, -1};
 
-        int[] xChangerEven = {-1, -1, 0, 1, 0, -1};
-        int[] yChangerEven = {0, 1, 1, 0, -1, -1};
+        int[] xChangerEven = {0, 1, 1, 0, -1, -1};
+        int[] yChangerEven = {-1, -1, 0, 1, 0, -1};
+
+        int[] xChangerOdd = {0, 1, 1, 0, -1, -1};
+        int[] yChangerOdd = {-1, 0, 1, 1, 1, 0};
 
         for (int i = 0; i < newSizeX; i++) {
             for (int j = 0; j < newSizeY; j++) {
@@ -228,12 +241,13 @@ public class HexagonMap {
                     for (int k = 0; k < 6; k++) {
                         try {
                             Hexagon h0 = map[i + xChangerEven[k]][j + yChangerEven[k]];
+                            System.out.println(h0.getCountry().getName());
                             if (h0.getCountry().getName().equals(currentHex.getCountry().getName())) {
-                                currentHex.setSideColor(k, borderColor);
-                                h0.setSideColor((k + 3) % 6, borderColor);
-                            } else {
                                 currentHex.setSideColor(k, new Color( 0, 0,0,0));
                                 h0.setSideColor((k + 3) % 6, new Color( 0, 0,0,0));
+                            } else {
+                                currentHex.setSideColor(k, borderColor);
+                                h0.setSideColor((k + 3) % 6, borderColor);
                             }
                         } catch (Exception e) {
                             currentHex.setSideColor(k, borderColor);
@@ -243,12 +257,13 @@ public class HexagonMap {
                     for (int k = 0; k < 6; k++) {
                         try {
                             Hexagon h0 = map[i + xChangerOdd[k]][j + yChangerOdd[k]];
+                            System.out.println(h0.getCountry().getName());
                             if (h0.getCountry().getName().equals(currentHex.getCountry().getName())) {
-                                currentHex.setSideColor(k, borderColor);
-                                h0.setSideColor((k + 3) % 6, borderColor);
-                            } else {
                                 currentHex.setSideColor(k, new Color( 0, 0,0,0));
                                 h0.setSideColor((k + 3) % 6, new Color( 0, 0,0,0));
+                            } else {
+                                currentHex.setSideColor(k, borderColor);
+                                h0.setSideColor((k + 3) % 6, borderColor);
                             }
                         } catch (Exception e) {
                             currentHex.setSideColor(k, borderColor);
@@ -258,14 +273,79 @@ public class HexagonMap {
             }
         }
 
+
         return true;
     }
 
-    public boolean drawBiomes(int count, BiomeInfo[] biomeTypes) {
-        return false;
+    public ArrayList<Hexagon> getNeighbors(int x, int y) {
+        ArrayList<Hexagon> toRet = new ArrayList<>();
+        return toRet;
+    }
+
+    public boolean initializeBiomes(int count, Biome[] biomeTypes) {
+        if (map == null) return false;
+
+        ArrayList<Biome> startBiomes = new ArrayList<>();
+
+        int k = 0;
+        while (k < count) {
+            int newX = rnd.nextInt(sizeX);
+            int newY = rnd.nextInt(sizeY);
+
+            boolean already = false;
+
+            for (Biome b : startBiomes) {
+                if (b.getX() == newX && b.getY() == newY) {
+                    already = true;
+                    break;
+                }
+            }
+
+            if (!already) {
+                Biome a = biomeTypes[rnd.nextInt(4)];
+                startBiomes.add(new Biome(a.getType(), newX, newY));
+                k += 1;
+            }
+        }
+
+        int bMapSizeX = offSet ? sizeX + 1 : sizeX;
+        int bMapSizeY = offSet ? sizeY + 1 : sizeY;
+
+        Biome[][] biomeMap = new Biome[bMapSizeX][bMapSizeY];
+
+        for (int i = 0; i < bMapSizeX; i++) {
+            for (int j = 0; j < bMapSizeY; j++) {
+                Biome nearest = new Biome(Color.BLACK);
+                int dist = Integer.MAX_VALUE;
+
+                for (Biome b : startBiomes) {
+                    int cdist = new Double(HexagonUtil.hex_distance(i, j, b.getX(), b.getY())).intValue();
+
+                    if (cdist < dist) {
+                        nearest.setType(b.getType());
+                        nearest.setName(b.getName());
+                        dist = cdist;
+                    }
+                }
+
+                biomeMap[i][j] = nearest;
+            }
+        }
+
+        for (int i = 0; i < bMapSizeX; i++) {
+            for (int j = 0; j < bMapSizeY; j++) {
+                if(map[i][j].getBodyColor() == Color.GREEN) {
+                    map[i][j].setBodyColor(biomeMap[i][j].getType());
+                }
+            }
+        }
+
+
+        return true;
     }
 
     private void drawSide(Hexagon hex, int posX, int posY, int sideID) {
+        g2.setStroke(new BasicStroke(2));
         g2.setColor(hex.getSideColor(sideID));
         switch (sideID) {
             case 0:
@@ -297,10 +377,6 @@ public class HexagonMap {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public double hex_distance(int x1, int y1, int x2, int y2) {
-        return (Math.abs(x1 - x2) + Math.abs(x1 + y1 - x2 -y2) + Math.abs(y1 - y2)) / 2;
     }
 
     public int getSizeX() {

@@ -1,8 +1,8 @@
 package sample;
 
+import bm.gameUtil.Biome;
 import bm.gameUtil.Country;
 import bm.hexagonUtil.HexagonMap;
-import bm.hexagonUtil.HexagonUtils;
 import bm.generatorUtil.NoiseGenerator;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -147,22 +147,22 @@ public class Controller {
                 console.appendText("[GEN] Generation finished in " + (stopTime - startTime) + "ms\n");
             }
 
-            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), 1, true, 0, 50, 12, 10);
-
-            Country[][] banane = {{new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.RED, "a")},
-                {new Country(Color.RED, "a"), new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")},
-                {new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")},
-                {new Country(Color.RED, "a"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b"), new Country(Color.DARK_GRAY, "b")}};
+            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), se, false, b, hexS, hexAx, hexAy);
 
             map.initializeLandmass(img);
 
-            //map.initializeCountries(banane);
+            Biome[] bio = {new Biome(new Color(255, 204, 0)), new Biome(new Color(102, 153, 0)),
+                    new Biome(new Color(51, 153, 51)), new Biome(new Color(0, 102, 0))};
+
+            map.initializeBiomes(biomeCount, bio);
+
+            map.initializeCountries(12);
 
             map.drawFill();
             map.drawGrid();
 
             /*
-            HexagonUtils hexu = new HexagonUtils(hexS, b, hexAx, hexAy, xOffSet, yOffSet, img); // initializes the HexagonUtils for this picture
+            HexagonUtil hexu = new HexagonUtil(hexS, b, hexAx, hexAy, xOffSet, yOffSet, img); // initializes the HexagonUtil for this picture
 
             // draws the map as hexagons if so wished
             if (hexMap) {
