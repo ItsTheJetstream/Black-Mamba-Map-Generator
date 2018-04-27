@@ -1,6 +1,7 @@
 package bm.generatorUtil;
 
 public class NoiseGenerator {
+
     public static double[][] generateNoiseMap(int mapWidth, int mapHeight, double scale, int octaves, double persistance, double lacunarity, long seed) {
         OpenSimplexNoise noise = new OpenSimplexNoise(seed);
         double noiseMap[][] = new double[mapWidth][mapHeight];
@@ -23,9 +24,7 @@ public class NoiseGenerator {
                     amplitude *= persistance;
                     frequency *= lacunarity;
                 }
-
                 noiseMap[x][y] = noiseHeight;
-
             }
         }
 

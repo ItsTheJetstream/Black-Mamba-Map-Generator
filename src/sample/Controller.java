@@ -2,17 +2,23 @@ package sample;
 
 import bm.gameUtil.Biome;
 import bm.gameUtil.Country;
+import bm.generatorUtil.Console;
 import bm.hexagonUtil.HexagonMap;
 import bm.generatorUtil.NoiseGenerator;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -20,6 +26,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Controller {
@@ -46,8 +54,24 @@ public class Controller {
     public CheckBox genBiomeCheck;
     public TextField biomeCountField;
     public TextField waterHeightField;
+    public ColorPicker borderColorPicker;
+    public ColorPicker capitalColorPicker;
+    public Slider borderOpacitySlider;
+    public CheckBox genCountriesCheck;
+    public TextField countryAmountField;
+    public ScrollPane countryList;
+    public Button removeCountryBtn;
+    public Button addCountryBtn;
+    public TextField inputField;
+    public Button inputBtn;
+    public CheckBox offSetCheck;
+    public VBox paneBox;
 
     private BufferedImage current;
+
+    private Console con;
+
+    private ArrayList<Pane> countryPanes = new ArrayList<Pane>();
 
     /**
      * Generates an image based on the current inputs on the different fields
@@ -55,6 +79,50 @@ public class Controller {
      */
     public void generateImage(ActionEvent actionEvent) {
         generateImageMethod();
+    }
+
+    private void generateImage() {
+        // TODO
+    }
+
+    public void addCountry(ActionEvent actionEvent) {
+        Pane toAdd = new Pane();
+        toAdd.setPrefSize(170, 40);
+
+        CheckBox toRemBox = new CheckBox();
+        toRemBox.setText("");
+        toRemBox.setLayoutX(14); toRemBox.setLayoutY(12);
+
+        TextField nameField = new TextField();
+        nameField.setPrefSize(90, 25);
+        nameField.setPromptText("Country Name");
+        nameField.setLayoutX(37); nameField.setLayoutY(8);
+
+        ColorPicker cP = new ColorPicker();
+        cP.setPrefSize(120, 25);
+        cP.setLayoutX(135); cP.setLayoutY(8);
+
+        toAdd.getChildren().add(0, toRemBox);
+        toAdd.getChildren().add(1, nameField);
+        toAdd.getChildren().add(2, cP);
+
+        paneBox.getChildren().add(toAdd);
+        countryPanes.add(toAdd);
+    }
+
+    public void removeCountry(ActionEvent actionEvent) {
+        ArrayList<Pane> toRemove = new ArrayList<Pane>();
+        for (Pane p : countryPanes) {
+            CheckBox current = (CheckBox) p.getChildren().get(0);
+            if (current.isSelected()) {
+                toRemove.add(p);
+            }
+        }
+
+        for (Pane p : toRemove) {
+            countryPanes.remove(p);
+            paneBox.getChildren().remove(p);
+        }
     }
 
     public void generateImageMethod() {
@@ -147,7 +215,7 @@ public class Controller {
                 console.appendText("[GEN] Generation finished in " + (stopTime - startTime) + "ms\n");
             }
 
-            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), se, false, b, hexS, hexAx, hexAy);
+            HexagonMap map = new HexagonMap((Graphics2D) img.getGraphics(), se, true, b, hexS, hexAx, hexAy);
 
             map.initializeLandmass(img);
 
@@ -156,7 +224,9 @@ public class Controller {
 
             map.initializeBiomes(biomeCount, bio);
 
-            map.initializeCountries(12);
+            map.initializeCountries(10);
+
+            System.out.println(map.drawCountryCapitials(Color.RED));
 
             map.drawFill();
             map.drawGrid();
@@ -235,6 +305,10 @@ public class Controller {
 
         File path = fileChooser.showSaveDialog(null);
 
+        if (path.exists()){
+            path.delete();
+        }
+
         if(current != null) {
             try {
                 ImageIO.write(current, "png", path);
@@ -261,4 +335,16 @@ public class Controller {
             genBiomeCheck.setDisable(true);
         }
     }
+
+    public void putCommand(ActionEvent actionEvent) {
+        this.con.putCommand(inputField.getText());
+    }
+
+    private void setUpConsole() {
+        if (this.con == null) {
+            this.con = new Console(console);
+        }
+    }
+
+
 }

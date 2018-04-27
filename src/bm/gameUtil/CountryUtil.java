@@ -21,12 +21,15 @@ public class CountryUtil {
 
     private Country waterCountry = new Country(Color.BLUE, "WATER");
 
+    private boolean[][] capitals;
+
     public CountryUtil(Random rnd) {
         this.rnd = rnd;
     }
     
     private ArrayList<Country> initStartingCountries(int count, int sizeX, int sizeY, boolean[][] landmass) {
         ArrayList<Country> toRet = new ArrayList<>();
+        capitals = new boolean[sizeX][sizeY];
 
         int k = 0;
         while (k < count) {
@@ -43,12 +46,28 @@ public class CountryUtil {
             }
 
             if (!already && landmass[newX][newY]) {
-                toRet.add(new Country(Color.BLACK, countryNames[k], newX, newY));
-                k += 1;
+                boolean tooShort = false;
+
+                for (Country c : toRet) {
+                    if (HexagonUtil.hex_distance(c.getX(), c.getY(), newX, newY) < 5) {
+                        tooShort = true;
+                    }
+                }
+
+                if (!tooShort) {
+                    Country addC = new Country(Color.BLACK, countryNames[k], newX, newY);
+                    capitals[newX][newY] = true;
+                    toRet.add(addC);
+                    k += 1;
+                }
             }
         }
         
         return toRet;
+    }
+
+    public boolean[][] getCapitals() {
+        return this.capitals;
     }
 
     public Country[][] initCountries(int count, int sizeX, int sizeY, boolean[][] landmass, String[] nameList) {

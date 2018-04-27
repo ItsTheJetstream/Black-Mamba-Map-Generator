@@ -11,20 +11,30 @@ public class Country {
     private int posX;
     private int posY;
 
-    public Country(Color cColor, String name, int posX, int posY) {
+    private boolean capital;
+
+    Country(Color cColor, String name, int posX, int posY) {
         this.name = name;
         this.outlineColor = cColor;
         this.posX = posX;
         this.posY = posY;
     }
 
-    public Country(Color cColor, String name) {
+    Country(Color cColor, String name) {
         this.name = name;
         this.outlineColor = cColor;
     }
 
     public Color getOutlineColor() {
         return outlineColor;
+    }
+
+    public boolean isCapital() {
+        return this.capital;
+    }
+
+    public void setCapital(boolean isCapital) {
+        this.capital = isCapital;
     }
 
     public void setOutlineColor(Color outlineColor) {

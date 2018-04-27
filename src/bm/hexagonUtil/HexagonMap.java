@@ -40,6 +40,7 @@ public class HexagonMap {
 
     private Hexagon[][] map; // the actual Map of Hexagons
     private boolean[][] landmass; // the landmass represented as "true" in this array
+    private boolean[][] countryCapital;
 
     private Graphics2D g2; // the graphics object to work on, usually of a BufferedImage
 
@@ -189,9 +190,11 @@ public class HexagonMap {
     public boolean drawGrid() {
         if (map == null) return false;
 
+        int newSizeX = offSet ? sizeX + 1 : sizeX;
+        int newSizeY = offSet ? sizeY + 1 : sizeY;
 
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
+        for (int i = 0; i < newSizeX; i++) {
+            for (int j = 0; j < newSizeY; j++) {
                 int x0 = offSet ? i - 1 : i; // subtracts one from the x-Pos if the offset is activated
                 int y0 = offSet ? j - 1 : j; // subtracts one from the y-Pos if the offset is activated
 
@@ -210,10 +213,12 @@ public class HexagonMap {
 
     public boolean initializeCountries(int count) {
         CountryUtil cU = new CountryUtil(rnd);
-        Country[][] countries = cU.initCountries(count, sizeX, sizeY, landmass, null);
 
         int newSizeX = offSet ? sizeX + 1 : sizeX;
         int newSizeY = offSet ? sizeY + 1 : sizeY;
+
+        Country[][] countries = cU.initCountries(count, newSizeX, newSizeY, landmass, null);
+        countryCapital = cU.getCapitals();
 
         for (int i = 0; i < newSizeX; i++) {
             for (int j = 0; j < newSizeY; j++) {
@@ -221,8 +226,6 @@ public class HexagonMap {
                 Country workCountry = countries[i][j];
 
                 workHex.setCountry(workCountry);
-
-                System.out.println(workHex.getCountry().getName());
             }
         }
 
@@ -237,14 +240,15 @@ public class HexagonMap {
             for (int j = 0; j < newSizeY; j++) {
                 Hexagon currentHex = map[i][j];
 
-                if (i % 2 == 0) {
+                int t = offSet ? i + 1 : i;
+
+                if (t % 2 == 0) {
                     for (int k = 0; k < 6; k++) {
                         try {
                             Hexagon h0 = map[i + xChangerEven[k]][j + yChangerEven[k]];
-                            System.out.println(h0.getCountry().getName());
                             if (h0.getCountry().getName().equals(currentHex.getCountry().getName())) {
-                                currentHex.setSideColor(k, new Color( 0, 0,0,0));
-                                h0.setSideColor((k + 3) % 6, new Color( 0, 0,0,0));
+                                currentHex.setSideColor(k, new Color( 0, 0,0,20));
+                                h0.setSideColor((k + 3) % 6, new Color( 0, 0,0,20));
                             } else {
                                 currentHex.setSideColor(k, borderColor);
                                 h0.setSideColor((k + 3) % 6, borderColor);
@@ -257,10 +261,9 @@ public class HexagonMap {
                     for (int k = 0; k < 6; k++) {
                         try {
                             Hexagon h0 = map[i + xChangerOdd[k]][j + yChangerOdd[k]];
-                            System.out.println(h0.getCountry().getName());
                             if (h0.getCountry().getName().equals(currentHex.getCountry().getName())) {
-                                currentHex.setSideColor(k, new Color( 0, 0,0,0));
-                                h0.setSideColor((k + 3) % 6, new Color( 0, 0,0,0));
+                                currentHex.setSideColor(k, new Color( 0, 0,0,20));
+                                h0.setSideColor((k + 3) % 6, new Color( 0, 0,0,20));
                             } else {
                                 currentHex.setSideColor(k, borderColor);
                                 h0.setSideColor((k + 3) % 6, borderColor);
@@ -280,6 +283,23 @@ public class HexagonMap {
     public ArrayList<Hexagon> getNeighbors(int x, int y) {
         ArrayList<Hexagon> toRet = new ArrayList<>();
         return toRet;
+    }
+
+    public boolean drawCountryCapitials(Color c) {
+        if (map == null || countryCapital == null) return false;
+
+        int newSizeX = offSet ? sizeX + 1 : sizeX;
+        int newSizeY = offSet ? sizeY + 1 : sizeY;
+
+        for (int i = 0; i < newSizeX; i ++) {
+            for (int j = 0; j < newSizeY; j++) {
+                if (countryCapital[i][j]) {
+                    map[i][j].setBodyColor(c);
+                }
+            }
+        }
+
+        return true;
     }
 
     public boolean initializeBiomes(int count, Biome[] biomeTypes) {
