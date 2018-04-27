@@ -14,6 +14,9 @@ public class HexagonMap {
     private int sizeX; // map size (x-axis)
     private int sizeY; // map size (y-axis)
 
+    private int newSizeX;
+    private int newSizeY;
+
     private int borders; // border thickness ("extra offset")
 
     /**
@@ -70,25 +73,24 @@ public class HexagonMap {
 
         this.borders = borders; // setting the border thickness
 
+        this.offSet = offSet;
+
         this.sizeX = mapSizeX; // the tile map size in x-direction
         this.sizeY = mapSizeY; // the tile map size in y-direction
+        this.newSizeX = offSet ? sizeX + 1 : sizeX;
+        this.newSizeY = offSet ? sizeY + 1 : sizeY;
 
         this.seed = seed;
-
-        this.offSet = offSet;
 
         this.rnd = new Random(Integer.toUnsignedLong(seed));
     }
 
     public void initialize() {
-        int maxX = offSet ? sizeX + 1 : sizeX;
-        int maxY = offSet ? sizeY + 1 : sizeY;
+        map = new Hexagon[newSizeX][newSizeY];
+        landmass = new boolean[newSizeX][newSizeY];
 
-        map = new Hexagon[maxX][maxY];
-        landmass = new boolean[maxX][maxY];
-
-        for (int i = 0; i < maxX; i++) {
-            for (int j = 0; j < maxY; j++) {
+        for (int i = 0; i < newSizeX; i++) {
+            for (int j = 0; j < newSizeY; j++) {
                 map[i][j] = new Hexagon(defaultBodyColor, defaultOutlineColor);
                 landmass[i][j] = true;
             }
@@ -160,7 +162,7 @@ public class HexagonMap {
 
     /**
      * Loops through every Hexagon in the array and draws its body color onto the Graphics Object
-     * @return true if everything worked, false if an error occured (map not intitialized)
+     * @return true if everything worked, false if an error occurred (map not intitialized)
      */
     public boolean drawFill() {
         if (map == null) return false;
@@ -174,6 +176,7 @@ public class HexagonMap {
 
                 Polygon poly = hexagon(x, y);
 
+                // new values for x and y to work on the array
                 int xS = offSet ? i + 1 : i;
                 int yS = offSet ? j + 1 : j;
 
@@ -187,11 +190,13 @@ public class HexagonMap {
         return true;
     }
 
+    /**
+     * Loops through every Hexagon in the array and draws its outline onto the Graphics object <br>
+     * Can draw a different color for every side (depending on what is stored in the Hexagons)
+     * @return true if everything worked, false if an error occurred (map not intitialized)
+     */
     public boolean drawGrid() {
         if (map == null) return false;
-
-        int newSizeX = offSet ? sizeX + 1 : sizeX;
-        int newSizeY = offSet ? sizeY + 1 : sizeY;
 
         for (int i = 0; i < newSizeX; i++) {
             for (int j = 0; j < newSizeY; j++) {
@@ -213,9 +218,6 @@ public class HexagonMap {
 
     public boolean initializeCountries(int count) {
         CountryUtil cU = new CountryUtil(rnd);
-
-        int newSizeX = offSet ? sizeX + 1 : sizeX;
-        int newSizeY = offSet ? sizeY + 1 : sizeY;
 
         Country[][] countries = cU.initCountries(count, newSizeX, newSizeY, landmass, null);
         countryCapital = cU.getCapitals();
@@ -288,9 +290,6 @@ public class HexagonMap {
     public boolean drawCountryCapitials(Color c) {
         if (map == null || countryCapital == null) return false;
 
-        int newSizeX = offSet ? sizeX + 1 : sizeX;
-        int newSizeY = offSet ? sizeY + 1 : sizeY;
-
         for (int i = 0; i < newSizeX; i ++) {
             for (int j = 0; j < newSizeY; j++) {
                 if (countryCapital[i][j]) {
@@ -328,13 +327,10 @@ public class HexagonMap {
             }
         }
 
-        int bMapSizeX = offSet ? sizeX + 1 : sizeX;
-        int bMapSizeY = offSet ? sizeY + 1 : sizeY;
+        Biome[][] biomeMap = new Biome[newSizeX][newSizeY];
 
-        Biome[][] biomeMap = new Biome[bMapSizeX][bMapSizeY];
-
-        for (int i = 0; i < bMapSizeX; i++) {
-            for (int j = 0; j < bMapSizeY; j++) {
+        for (int i = 0; i < newSizeX; i++) {
+            for (int j = 0; j < newSizeY; j++) {
                 Biome nearest = new Biome(Color.BLACK);
                 int dist = Integer.MAX_VALUE;
 
@@ -352,8 +348,8 @@ public class HexagonMap {
             }
         }
 
-        for (int i = 0; i < bMapSizeX; i++) {
-            for (int j = 0; j < bMapSizeY; j++) {
+        for (int i = 0; i < newSizeX; i++) {
+            for (int j = 0; j < newSizeY; j++) {
                 if(map[i][j].getBodyColor() == Color.GREEN) {
                     map[i][j].setBodyColor(biomeMap[i][j].getType());
                 }

@@ -126,15 +126,14 @@ public class Controller {
     }
 
     public void generateImageMethod() {
-        int w = -1, h = -1, o = -1, se = -1;
-        int b = 0, hexS = 0, hexAx = 0, hexAy = 0;
-        int xOffSet = 0, yOffSet = 0;
+        int w = 800, h = 800, o = 4, se = 12345;
+        int b = 0, hexS = 50, hexAx = 20, hexAy = 20;
 
-        int biomeCount = 0;
+        int biomeCount = 10;
 
         double waterHeight = 0;
 
-        double s = -1, p = -1, l = -1;
+        double s = 120, p = 0.3, l = 2.0;
 
         boolean useConsole = consoleCheck.isSelected();
         boolean no_err;
@@ -145,6 +144,7 @@ public class Controller {
         boolean genBiome = genBiomeCheck.isSelected() & hexMap;
 
         try {
+            /*
             w = Integer.parseInt(widthField.getText());
             h = Integer.parseInt(heightField.getText());
             o = Integer.parseInt(octavesField.getText());
@@ -165,7 +165,7 @@ public class Controller {
 
             xOffSet = Integer.parseInt(xOffsetField.getText());
             yOffSet = Integer.parseInt(yOffsetField.getText());
-
+*/
             no_err = true;
         } catch (Exception e) {
             // error occured, display error message in console (if needed)
