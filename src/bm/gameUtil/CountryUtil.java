@@ -1,6 +1,10 @@
 package bm.gameUtil;
 
 import bm.hexagonUtil.HexagonUtil;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -107,6 +111,30 @@ public class CountryUtil {
         for (int i = 0; i < count; i++) {
             toRet[i] = countryNames[i];
         }
+        return toRet;
+    }
+
+    public static Pane newCountryPane() {
+        Pane toRet = new Pane();
+        toRet.setPrefSize(170, 40);
+
+        CheckBox toRemBox = new CheckBox();
+        toRemBox.setText("");
+        toRemBox.setLayoutX(14); toRemBox.setLayoutY(12);
+
+        javafx.scene.control.TextField nameField = new TextField();
+        nameField.setPrefSize(90, 25);
+        nameField.setPromptText("Country Name");
+        nameField.setLayoutX(37); nameField.setLayoutY(8);
+
+        ColorPicker cP = new ColorPicker();
+        cP.setPrefSize(120, 25);
+        cP.setLayoutX(135); cP.setLayoutY(8);
+
+        toRet.getChildren().add(0, toRemBox);
+        toRet.getChildren().add(1, nameField);
+        toRet.getChildren().add(2, cP);
+
         return toRet;
     }
 }

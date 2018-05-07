@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
@@ -15,13 +16,14 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<VBox prefHeight="800.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bm.guiUtil.Controller">
   <children>
     <MenuBar prefHeight="0.0" prefWidth="597.0" VBox.vgrow="NEVER">
       <menus>
@@ -42,11 +44,17 @@
           <items>
             <MenuItem mnemonicParsing="false" text="Undo" />
             <MenuItem mnemonicParsing="false" text="Redo" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <RadioMenuItem mnemonicParsing="false" text="Show Outlined Grid Layer" />
+                  <RadioMenuItem mnemonicParsing="false" text="Show Filled Grid Layer" />
+                  <RadioMenuItem mnemonicParsing="false" text="Show Biome Layer" />
+                  <RadioMenuItem mnemonicParsing="false" text="Show Country Layer" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
             <MenuItem mnemonicParsing="false" text="About Black Mamba Map Generator" />
+                  <MenuItem mnemonicParsing="false" text="Changelog" />
           </items>
         </Menu>
       </menus>
@@ -65,8 +73,7 @@
             <AnchorPane layoutX="800.0" maxHeight="800.0" maxWidth="300.0" prefHeight="800.0" prefWidth="300.0">
                <children>
                   <Separator layoutY="431.0" prefHeight="9.0" prefWidth="300.0" />
-                  <CheckBox fx:id="consoleCheck" layoutX="10.0" layoutY="445.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="121.0" selected="true" text="Show Console" />
-                  <Separator layoutY="471.0" prefHeight="0.0" prefWidth="300.0" />
+                  <CheckBox fx:id="consoleCheck" layoutX="10.0" layoutY="446.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="121.0" selected="true" text="Show Console" />
                   <TextArea fx:id="console" layoutY="474.0" prefHeight="270.0" prefWidth="300.0">
                      <font>
                         <Font name="Lucida Console" size="12.0" />
@@ -80,8 +87,8 @@
                                     <AnchorPane prefHeight="50.0" prefWidth="300.0">
                                        <children>
                                           <Label layoutX="14.0" layoutY="8.0" prefHeight="34.0" prefWidth="111.0" text="Dimensions" />
-                                          <TextField fx:id="heightField" layoutX="218.0" layoutY="13.0" prefHeight="25.0" prefWidth="68.0" promptText="(int)" text="800" />
                                           <TextField fx:id="widthField" layoutX="136.0" layoutY="13.0" prefHeight="25.0" prefWidth="68.0" promptText="(int)" text="800" />
+                                          <TextField fx:id="heightField" layoutX="218.0" layoutY="13.0" prefHeight="25.0" prefWidth="68.0" promptText="(int)" text="800" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane layoutY="50.0" prefHeight="50.0" prefWidth="300.0">
@@ -94,6 +101,12 @@
                                        <children>
                                           <Label layoutX="14.0" layoutY="10.0" prefHeight="34.0" prefWidth="111.0" text="Persistance" />
                                           <TextField fx:id="persistanceField" layoutX="137.0" layoutY="14.0" promptText="(double)" text="0.3" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane layoutY="150.0" prefHeight="50.0" prefWidth="300.0">
+                                       <children>
+                                          <Label layoutX="14.0" layoutY="8.0" prefHeight="34.0" prefWidth="111.0" text="Octaves" />
+                                          <TextField fx:id="octavesField" layoutX="137.0" layoutY="13.0" promptText="(int)" text="4" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane layoutY="200.0" prefHeight="50.0" prefWidth="300.0">
@@ -109,12 +122,6 @@
                                           <Button layoutX="197.0" layoutY="41.0" mnemonicParsing="false" onAction="#randomizeSeed" prefHeight="25.0" prefWidth="89.0" text="Randomize" />
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane layoutY="150.0" prefHeight="50.0" prefWidth="300.0">
-                                       <children>
-                                          <Label layoutX="14.0" layoutY="8.0" prefHeight="34.0" prefWidth="111.0" text="Octaves" />
-                                          <TextField fx:id="octavesField" layoutX="137.0" layoutY="13.0" promptText="(int)" text="4" />
-                                       </children>
-                                    </AnchorPane>
                                     <Button layoutX="75.0" layoutY="363.0" mnemonicParsing="false" onAction="#generateImage" prefWidth="150.0" text="Generate Image" />
                                  </children>
                               </AnchorPane>
@@ -124,33 +131,39 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <CheckBox fx:id="hexGridCheck" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="273.0" text="Generate Hexagonal Grid" />
-                                    <CheckBox fx:id="hexGenCheck" layoutX="14.0" layoutY="39.0" mnemonicParsing="false" onMouseClicked="#toggleBiomes" prefHeight="17.0" prefWidth="273.0" text="Generate Map as Hexagons" />
-                                    <Pane layoutY="88.0" prefHeight="50.0" prefWidth="300.0">
+                                    <CheckBox fx:id="offSetCheck" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#toggleBiomes" prefHeight="17.0" prefWidth="273.0" selected="true" text="Offset Grid" />
+                                    <Pane layoutX="1.0" layoutY="43.0" prefHeight="44.0" prefWidth="300.0">
+                                       <children>
+                                          <Label layoutX="14.0" layoutY="14.0" text="Grid Opacity" />
+                                          <Slider layoutX="141.0" layoutY="9.0" minorTickCount="1" showTickLabels="true" snapToTicks="true" value="30.0" />
+                                       </children>
+                                    </Pane>
+                                    <Pane layoutY="87.0" prefHeight="50.0" prefWidth="300.0">
+                                       <children>
+                                          <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="Grid Color" />
+                                          <ColorPicker editable="true" layoutX="145.0" layoutY="13.0" />
+                                       </children>
+                                    </Pane>
+                                    <Pane layoutX="1.0" layoutY="137.0" prefHeight="50.0" prefWidth="300.0">
+                                       <children>
+                                          <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="Grid Dimension" />
+                                          <TextField layoutX="137.0" layoutY="13.0" prefHeight="25.0" prefWidth="68.0" promptText="(int)" text="20" fx:id="xAmountField" />
+                                          <TextField fx:id="yAmountField" layoutX="218.0" layoutY="13.0" prefHeight="25.0" prefWidth="68.0" promptText="(int)" text="20" />
+                                       </children>
+                                    </Pane>
+                                    <Pane layoutX="1.0" layoutY="187.0" prefHeight="50.0" prefWidth="300.0">
                                        <children>
                                           <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="Hexagon height" />
                                           <TextField fx:id="hexHeightField" layoutX="137.0" layoutY="13.0" promptText="(int)" text="50" />
                                        </children>
                                     </Pane>
-                                    <Pane layoutX="1.0" layoutY="138.0" prefHeight="50.0" prefWidth="300.0">
+                                    <Pane layoutX="1.0" layoutY="237.0" prefHeight="50.0" prefWidth="300.0">
                                        <children>
                                           <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="Border Size (W.I.P.)" />
                                           <TextField fx:id="borderSizeField" disable="true" layoutX="137.0" layoutY="13.0" promptText="(int)" text="0" />
                                        </children>
                                     </Pane>
-                                    <Pane layoutX="1.0" layoutY="188.0" prefHeight="50.0" prefWidth="300.0">
-                                       <children>
-                                          <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="x-axis Hexagons" />
-                                          <TextField layoutX="137.0" layoutY="13.0" promptText="(int)" text="20" fx:id="xAmountField" />
-                                       </children>
-                                    </Pane>
-                                    <Pane layoutY="238.0" prefHeight="50.0" prefWidth="300.0">
-                                       <children>
-                                          <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="y-axis Hexagons" />
-                                          <TextField fx:id="yAmountField" layoutX="137.0" layoutY="13.0" promptText="(int)" text="20" />
-                                       </children>
-                                    </Pane>
-                                    <CheckBox fx:id="offSetCheck" layoutX="14.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#toggleBiomes" prefHeight="17.0" prefWidth="273.0" text="Offset Grid" />
+                                    <Button fx:id="genHexBtn" layoutX="91.0" layoutY="363.0" mnemonicParsing="false" onAction="#generateHexagons" text="Generate Hexagons" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -172,6 +185,22 @@
                                           <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="114.0" text="Water Height" />
                                        </children>
                                     </Pane>
+                                    <ScrollPane fx:id="biomeList" hbarPolicy="NEVER" layoutX="14.0" layoutY="234.0" prefHeight="128.0" prefWidth="272.0">
+                                       <content>
+                                          <VBox fx:id="biomePaneBox" prefWidth="270.0" />
+                                       </content>
+                                    </ScrollPane>
+                                    <Button fx:id="addBiomeBtn" layoutX="14.0" layoutY="369.0" mnemonicParsing="false" onAction="#addBiome" text="Add new Biome" />
+                                    <Button fx:id="removeBIomeBtn" layoutX="179.0" layoutY="369.0" mnemonicParsing="false" onAction="#removeBiome" text="Remove selected" />
+                                    <Button fx:id="biomeResetBtn" layoutX="129.0" layoutY="368.0" mnemonicParsing="false" onAction="#biomeReset">
+                                       <graphic>
+                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@redo_icon.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
                                  </children></AnchorPane>
                           </content>
                         </Tab>
@@ -179,6 +208,7 @@
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
+                                    <CheckBox fx:id="genCountriesCheck" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Generate Countries" />
                                     <Pane layoutY="34.0" prefHeight="50.0" prefWidth="300.0">
                                        <children>
                                           <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="Border Color" />
@@ -194,10 +224,9 @@
                                     <Pane layoutY="134.0" prefHeight="50.0" prefWidth="300.0">
                                        <children>
                                           <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="Border Opacity" />
-                                          <Slider fx:id="borderOpacitySlider" layoutX="146.0" layoutY="9.0" showTickLabels="true" snapToTicks="true" value="30.0" />
+                                          <Slider fx:id="borderOpacitySlider" layoutX="142.0" layoutY="9.0" minorTickCount="1" showTickLabels="true" snapToTicks="true" value="30.0" />
                                        </children>
                                     </Pane>
-                                    <CheckBox fx:id="genCountriesCheck" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Generate Countries" />
                                     <Pane layoutY="184.0" prefHeight="50.0" prefWidth="300.0">
                                        <children>
                                           <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="121.0" text="Country amount" />
@@ -206,18 +235,27 @@
                                     </Pane>
                                     <ScrollPane fx:id="countryList" hbarPolicy="NEVER" layoutX="14.0" layoutY="234.0" prefHeight="128.0" prefWidth="272.0">
                                        <content>
-                                          <VBox fx:id="paneBox" prefWidth="270.0" />
+                                          <VBox fx:id="countryPaneBox" prefWidth="270.0" />
                                        </content></ScrollPane>
-                                    <Button fx:id="removeCountryBtn" layoutX="179.0" layoutY="369.0" mnemonicParsing="false" onAction="#removeCountry" text="Remove Selected" />
                                     <Button fx:id="addCountryBtn" layoutX="14.0" layoutY="369.0" mnemonicParsing="false" onAction="#addCountry" text="Add new country" />
+                                    <Button fx:id="removeCountryBtn" layoutX="179.0" layoutY="369.0" mnemonicParsing="false" onAction="#removeCountry" text="Remove selected" />
+                                     <Button fx:id="countryResetBtn" layoutX="132.0" layoutY="368.0" mnemonicParsing="false" onAction="#countryReset">
+                                         <graphic>
+                                             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                 <image>
+                                                     <Image url="@redo_icon.png" />
+                                                 </image>
+                                             </ImageView>
+                                         </graphic>
+                                     </Button>
                                  </children>
                               </AnchorPane>
                           </content>
                         </Tab>
                     </tabs>
                   </TabPane>
-                  <TextField fx:id="inputField" layoutX="4.0" layoutY="748.0" prefHeight="25.0" prefWidth="222.0" />
-                  <Button fx:id="inputBtn" layoutX="234.0" layoutY="748.0" mnemonicParsing="false" onAction="#putCommand" prefHeight="25.0" prefWidth="59.0" text="Input" />
+                  <TextField fx:id="inputField" layoutX="4.0" layoutY="746.0" prefHeight="25.0" prefWidth="222.0" />
+                  <Button fx:id="inputBtn" layoutX="234.0" layoutY="746.0" mnemonicParsing="false" onAction="#putCommand" prefHeight="25.0" prefWidth="59.0" text="Input" />
                </children>
             </AnchorPane>
          </children>

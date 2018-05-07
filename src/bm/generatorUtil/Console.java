@@ -5,6 +5,7 @@ import javafx.scene.control.TextArea;
 public class Console {
 
     private TextArea console;
+    private boolean isActivated = true;
 
     public Console(TextArea console) {
         this.console = console;
@@ -15,8 +16,12 @@ public class Console {
         console.clear();
     }
 
+    public void setActivated(boolean bool) {
+        this.isActivated = bool;
+    }
+
     public void write(String text) {
-        console.appendText(text + "\n");
+        if (isActivated) console.appendText(text + "\n");
     }
 
     public void write(String[] lines) {
@@ -30,6 +35,9 @@ public class Console {
         switch (command) {
             case "help":
                 write(lines);
+                break;
+            case "clear":
+                clearConsole();
                 break;
             default:
                 write(lines);
